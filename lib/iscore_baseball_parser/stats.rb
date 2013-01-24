@@ -41,21 +41,24 @@ module IscoreBaseballParser
     private
     def parse_batting(workbook)
       batter = IscoreBaseballParser::Players::Batter.new(workbook.row(1))
-      parse_player(batter, workbook)
+      parse_player(batter, workbook, true)
     end
     
     def parse_pitching(workbook)
-      batter = IscoreBaseballParser::Players::Pitcher.new(workbook.row(1))
-      parse_player(batter, workbook)
+      pitcher = IscoreBaseballParser::Players::Pitcher.new(workbook.row(1))
+      parse_player(pitcher, workbook)
     end
     
     def parse_fielding(workbook)
-      batter = IscoreBaseballParser::Players::Fielder.new(workbook.row(1))
-      parse_player(batter, workbook)
+      fielder = IscoreBaseballParser::Players::Fielder.new(workbook.row(1))
+      parse_player(fielder, workbook)
     end
     
-    def parse_player(player, workbook)
-      (2..workbook.last_row-1).map do |i|
+    def parse_player(player, workbook, total_row = false)
+      last_row = workbook.last_row
+      last_row = last_row - 1 if total_row
+      
+      (2..last_row).map do |i|
         row = workbook.row(i)
         
         player = player.clone
