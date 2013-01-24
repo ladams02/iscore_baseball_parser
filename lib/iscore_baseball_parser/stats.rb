@@ -22,6 +22,8 @@ module IscoreBaseballParser
     def parse
       @workbook.sheets.each_with_index do |sheet, idx|
         @workbook.default_sheet = sheet
+        next if @workbook.to_s == "nil" # hack to check for nil workbook
+        
         category = @categories[idx]
         
         stat_array = if category.start_with?("batting")
@@ -37,24 +39,24 @@ module IscoreBaseballParser
     end
     
     private
-    def parse_batting(worksheet)
-      batter = IscoreBaseballParser::Players::Batter.new(worksheet.row(1))
-      parse_player(batter, worksheet)
+    def parse_batting(workbook)
+      batter = IscoreBaseballParser::Players::Batter.new(workbook.row(1))
+      parse_player(batter, workbook)
     end
     
-    def parse_pitching(worksheet)
-      batter = IscoreBaseballParser::Players::Pitcher.new(worksheet.row(1))
-      parse_player(batter, worksheet)
+    def parse_pitching(workbook)
+      batter = IscoreBaseballParser::Players::Pitcher.new(workbook.row(1))
+      parse_player(batter, workbook)
     end
     
-    def parse_fielding(worksheet)
-      batter = IscoreBaseballParser::Players::Fielder.new(worksheet.row(1))
-      parse_player(batter, worksheet)
+    def parse_fielding(workbook)
+      batter = IscoreBaseballParser::Players::Fielder.new(workbook.row(1))
+      parse_player(batter, workbook)
     end
     
-    def parse_player(player, worksheet)
-      (2..worksheet.last_row-1).map do |i|
-        row = worksheet.row(i)
+    def parse_player(player, workbook)
+      (2..workbook.last_row-1).map do |i|
+        row = workbook.row(i)
         
         player = player.clone
         player.parse_row(row)
