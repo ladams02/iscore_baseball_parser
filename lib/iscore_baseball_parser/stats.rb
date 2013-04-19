@@ -1,5 +1,7 @@
 module IscoreBaseballParser
   class Stats
+    START_CATEGORIES_ROW = 4
+    
     attr_accessor :stats
     
     def initialize(workbook)
@@ -7,7 +9,7 @@ module IscoreBaseballParser
       @categories = @workbook.sheets.map { |sheet| sheet.underscore }
       
       @categories.each do |category|
-        category = category.gsub("-", "_").downcase
+        category = category.underscore
         self.class.__send__(:attr_accessor, category)
         self.send("#{category}=", [])
       end
@@ -21,6 +23,7 @@ module IscoreBaseballParser
     
     def parse
       @workbook.sheets.each_with_index do |sheet, idx|
+        
         @workbook.default_sheet = sheet
         next if @workbook.to_s == "nil" # hack to check for nil workbook
         
@@ -40,25 +43,24 @@ module IscoreBaseballParser
     
     private
     def parse_batting(workbook)
-      batter = IscoreBaseballParser::Players::Batter.new(workbook.row(1))
-      parse_player(batter, workbook, true)
+      batter = IscoreBaseballParser::Players::Batter.new(workbook.row(START_CATEGORIES_ROW))
+      parse_player(batter, workbook)
     end
     
     def parse_pitching(workbook)
-      pitcher = IscoreBaseballParser::Players::Pitcher.new(workbook.row(1))
+      pitcher = IscoreBaseballParser::Players::Pitcher.new(workbook.row(START_CATEGORIES_ROW))
       parse_player(pitcher, workbook)
     end
     
     def parse_fielding(workbook)
-      fielder = IscoreBaseballParser::Players::Fielder.new(workbook.row(1))
+      fielder = IscoreBaseballParser::Players::Fielder.new(workbook.row(START_CATEGORIES_ROW))
       parse_player(fielder, workbook)
     end
     
-    def parse_player(player, workbook, total_row = false)
-      last_row = workbook.last_row
-      last_row = last_row - 1 if total_row
+    def parse_player(player, workbook)
+      last_row = workbook.last_row - 1 # subtract total row
       
-      (2..last_row).map do |i|
+      ((START_CATEGORIES_ROW + 1)..last_row).map do |i|
         row = workbook.row(i)
         
         player = player.clone
