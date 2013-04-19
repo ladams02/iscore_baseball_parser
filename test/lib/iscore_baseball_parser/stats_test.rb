@@ -12,7 +12,7 @@ describe IscoreBaseballParser::Stats do
     
     it "should create valid attributes for workbook sheets" do
       @workbook.sheets.each do |sheet|
-        sheet = sheet.gsub("-", "_").downcase
+        sheet = sheet.underscore
         assert_respond_to(@stats, sheet.to_sym)
         assert_instance_of Array, @stats.send(sheet.to_sym)
       end

@@ -4,7 +4,7 @@ module IscoreBaseballParser
     
     def initialize(workbook)
       @workbook = workbook
-      @categories = @workbook.sheets.map { |sheet| sheet.gsub("-", "_").downcase }
+      @categories = @workbook.sheets.map { |sheet| sheet.underscore }
       
       @categories.each do |category|
         category = category.gsub("-", "_").downcase
@@ -26,11 +26,11 @@ module IscoreBaseballParser
         
         category = @categories[idx]
         
-        stat_array = if category.start_with?("batting")
+        stat_array = if category.end_with?("batting")
           parse_batting(@workbook)
-        elsif category.start_with?("pitching")
+        elsif category.end_with?("pitching")
           parse_pitching(@workbook)
-        elsif category.start_with?("fielding")
+        elsif category.end_with?("fielding")
           parse_fielding(@workbook)
         end
         

@@ -1,3 +1,4 @@
+require_relative "./string"
 require_relative "./iscore_baseball_parser/base"
 require_relative "./iscore_baseball_parser/stats"
 require_relative "./iscore_baseball_parser/players/player"
