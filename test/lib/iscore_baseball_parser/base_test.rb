@@ -22,7 +22,7 @@ describe IscoreBaseballParser::Base do
     end
     
     it "should create a valid workbook" do
-      assert_instance_of Excel, @parser.workbook
+      assert_instance_of Roo::Excel, @parser.workbook
     end
     
     it "should return stats" do
@@ -37,7 +37,7 @@ describe IscoreBaseballParser::Base do
     end
     
     it "should create a valid workbook" do
-      assert_instance_of Excelx, @parser.workbook
+      assert_instance_of Roo::Excelx, @parser.workbook
     end
     
     it "should return stats" do

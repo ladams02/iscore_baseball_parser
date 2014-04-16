@@ -7,9 +7,9 @@ module IscoreBaseballParser
     
     def initialize(file)
       @workbook = if file.end_with? "xls"
-        Excel.new(file)
+        Roo::Excel.new(file)
       elsif file.end_with? "xlsx"
-        Excelx.new(file)
+        Roo::Excelx.new(file)
       else
         raise IOError.new("#{file} is an invalid filetype. Acceptable filetypes are .xlsx and .xsl.")
       end
